@@ -11,12 +11,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import br.com.sample.agendaapp.R;
 import br.com.sample.agendaapp.adapters.MyAdapter;
+import br.com.sample.agendaapp.core.ControllerProfileActivity;
 import br.com.sample.agendaapp.interfaces.ItemClickCallback;
 import br.com.sample.agendaapp.models.ListItem;
 import br.com.sample.agendaapp.models.MyContacts;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     private MyAdapter adapter;
     private ArrayList listData;
     private ListItem item;
+    private TextView tv_perfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        tv_perfil = (TextView) headerView.findViewById(R.id.tv_perfil);
 
         listData = (ArrayList) MyContacts.getListData();
 
@@ -65,6 +72,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if(ControllerProfileActivity.getInstance().getValue() != null){
+            tv_perfil.setText(ControllerProfileActivity.getInstance().getValue());
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -81,9 +96,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
-
+            Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
         }
@@ -120,5 +137,10 @@ public class MainActivity extends AppCompatActivity
             item.setFavourite(true);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    public void goToProfile(View view){
+        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(intent);
     }
 }
