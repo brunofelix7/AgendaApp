@@ -1,6 +1,7 @@
 package br.com.sample.agendaapp.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,27 +14,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-
 import br.com.sample.agendaapp.R;
 import br.com.sample.agendaapp.adapters.MyAdapter;
 import br.com.sample.agendaapp.core.ControllerProfileActivity;
 import br.com.sample.agendaapp.interfaces.ItemClickCallback;
-import br.com.sample.agendaapp.models.ListItem;
+import br.com.sample.agendaapp.models.Contact;
 import br.com.sample.agendaapp.models.MyContacts;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ItemClickCallback {
 
-    private static final String BUNDLE_EXTRAS = "BUNDLE_EXTRAS";
-    private static final String EXTRA_TITLE = "TITLE";
-    private static final String EXTRA_SUBTITLE = "SUBTITLE";
     private RecyclerView rv_list;
     private MyAdapter adapter;
     private ArrayList listData;
-    private ListItem item;
     private TextView tv_perfil;
 
     @Override
@@ -51,30 +45,35 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //  Recupera o header do NavegationView
         View headerView = navigationView.getHeaderView(0);
         tv_perfil = (TextView) headerView.findViewById(R.id.tv_perfil);
 
+        //  Recupero meus dados da numa lista
         listData = (ArrayList) MyContacts.getListData();
 
-        //  RECUPERA O RecyclerView
+        //  Recupera o RecyclerView
         rv_list = (RecyclerView) findViewById(R.id.rv_list);
 
-        //  DEFINE O TIPO DE LAYOUT DO RecyclerView
-        //  Or GridLayoutManager or StaggeredGridLayoutManager
-        rv_list.setLayoutManager(new LinearLayoutManager(this));
+        //  Define o tipo do layout do RecyclerView, pode ser GridLayoutManager ou StaggeredGridLayoutManager também
+        rv_list.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
-        //  MEU ADAPTER RECEBE A LISTA DE DADOS AQUI
-        adapter = new MyAdapter(MyContacts.getListData(), this);
-        adapter.setItemClickCallback(this);
+        //  Meu adapter recebe minha lista de dados nesse contexto
+        adapter = new MyAdapter(MyContacts.getListData(), MainActivity.this);
 
-        //  ADICIONA MEU ADAPTER
+        //  Seto meu listener nesse contexto
+        adapter.setItemClickCallback(MainActivity.this);
+
+        //  Adiciona meu adapter no RecyclerView
         rv_list.setAdapter(adapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(ControllerProfileActivity.getInstance().getValue() != null){
+        //  Sempre verifica se o valor que vou pegar é != de null
+        //  Caso contrário, ao iniciar a 1ª eu recebo NullPointerException
+        if (ControllerProfileActivity.getInstance().getValue() != null) {
             tv_perfil.setText(ControllerProfileActivity.getInstance().getValue());
         }
     }
@@ -95,14 +94,20 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_settings) {
+            //  Vai pra tela de configurações
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_web) {
+            //  Vai pra tela de WebView
             Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_exit) {
+            //  Sai da aplicação
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -111,36 +116,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemClick(int p) {
-        Toast.makeText(this, "Click on item " + p, Toast.LENGTH_SHORT).show();
+    public void onIconClick(int p) {
+        //  Toast.makeText(MainActivity.this, "Get position: " + p, Toast.LENGTH_SHORT).show();
 
-        //  Vou passar pra minha activity de listagem o que eu cliquei
-        item = (ListItem) listData.get(p);
-        Intent intent = new Intent(this, DetailsActivity.class);
-        Bundle extras = new Bundle();
-        extras.putString(EXTRA_TITLE, item.getTitle());
-        extras.putString(EXTRA_SUBTITLE, item.getSubTitle());
-        intent.putExtra(BUNDLE_EXTRAS, extras);
+        //  Recupera a posição do item no RecyclerView
+        Contact contact = (Contact) listData.get(p);
+
+        //  Realiza uma discagem pegando o telefone, com base na posição da lista
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + contact.getPhone()));
         startActivity(intent);
-    }
 
-    @Override
-    public void onSecondaryIconClick(int p) {
-        Toast.makeText(this, "Click on secondary item " + p, Toast.LENGTH_SHORT).show();
-
-        //  VOCÊ PODE CHAMAR ALGUM MÉTODO LÁ DO MyAdapter e executar alguma ação como excluir a ocorrência por exemplo
-        ListItem item = (ListItem) listData.get(p);
-        //update our data
-        if (item.isFavourite()){
-            item.setFavourite(false);
-        } else {
-            item.setFavourite(true);
-        }
+        //  Executa alguma ação ou evento no meu adapter
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Vai pra tela de edição de perfil
+     * @param view
+     */
     public void goToProfile(View view){
         Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(intent);
     }
+
 }

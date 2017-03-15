@@ -1,6 +1,6 @@
 package br.com.sample.agendaapp.models;
 
-public class Contacts {
+public class Contact {
 
     private String name;
     private String phone;

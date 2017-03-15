@@ -12,12 +12,12 @@ import java.util.List;
 
 import br.com.sample.agendaapp.R;
 import br.com.sample.agendaapp.interfaces.ItemClickCallback;
-import br.com.sample.agendaapp.models.ListItem;
+import br.com.sample.agendaapp.models.Contact;
 
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
-    private List<ListItem> listData;
+    private List<Contact> listContacts;
     private LayoutInflater inflater;
     private ItemClickCallback itemClickCallback;
 
@@ -25,9 +25,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         this.itemClickCallback = itemClickCallback;
     }
 
-    public MyAdapter(List<ListItem> listData, Context context) {
+    public MyAdapter(List<Contact> listContacts, Context context) {
         this.inflater = LayoutInflater.from(context);
-        this.listData = listData;
+        this.listContacts = listContacts;
     }
 
     //  Cria o RecyclerView.ViewHolder, e inicializa os componentes particulares
@@ -35,7 +35,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //  Recebo minha lista de itens
-        View view = inflater.inflate(R.layout.itens_list, parent, false);                        //  CardView - Seta isso
+        View view = inflater.inflate(R.layout.itens_list, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -43,15 +43,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     // também configura alguns campos particulares para serem usados ​​pelo RecyclerView.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        ListItem item = listData.get(position);
-        holder.title.setText(item.getTitle());
-        holder.subTitle.setText(item.getSubTitle());
+        Contact item = listContacts.get(position);
+        holder.tv_contact_name.setText(item.getName());
     }
 
     //  Retorna o número total de itens no conjunto de dados mantido pelo adaptador.
     @Override
     public int getItemCount() {
-        return listData.size();
+        return listContacts.size();
     }
 
     /**
@@ -60,44 +59,29 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
      */
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        //  REPRESENTA O QUE EU TENHO LÁ NO MEU item_list
-        private TextView title;
-        private TextView subTitle;
-        private ImageView thumbnail;
-        private ImageView secondaryIcon;                                            //  CardView - Comente isso
+        //  Representa as Views que eu tenho no meu item_list
+        private TextView tv_contact_name;
+        private ImageView iv_account;
+        private ImageView iv_call_number;
         private View container;
-        //private Button btn_detail;                                                      //  CardView - Acrescente isso
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            title           = (TextView) itemView.findViewById(R.id.lbl_item_text);
-            subTitle        = (TextView) itemView.findViewById(R.id.lbl_item_sub_title);
-            thumbnail       = (ImageView) itemView.findViewById(R.id.im_item_icon);
-            secondaryIcon   = (ImageView) itemView.findViewById(R.id.im_item_icon_secondary);   //  CardView - Comente isso
-            container       = itemView.findViewById(R.id.cont_item_root);
-            //btn_detail      = (Button) itemView.findViewById(R.id.btn_card_load);   //  CardView - Acrescente isso
-            container.setOnClickListener(this);                                     //  CardView - Comente isso
-            secondaryIcon.setOnClickListener(this);                                 //  CardView - Comente isso
-            //btn_detail.setOnClickListener(this);                                        //  CardView - Acrescente isso
+            tv_contact_name  = (TextView) itemView.findViewById(R.id.tv_contact_name);
+            iv_account       = (ImageView) itemView.findViewById(R.id.iv_account);
+            iv_call_number   = (ImageView) itemView.findViewById(R.id.iv_call_number);
+            container        = itemView.findViewById(R.id.cont_item_root);
+            iv_call_number.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if(view.getId() == R.id.cont_item_root){                                     //  CardView - Mude para btn ao invés do container
-                //  PEGA A POSIÇÃO DO ITEM CLICADO NO ADAPTER
-                itemClickCallback.onItemClick(getAdapterPosition());
-            }else{
-                itemClickCallback.onSecondaryIconClick(getAdapterPosition());       //  CardView - Comente isso
+            if(view.getId() == R.id.iv_call_number){
+                //  Pega o id da posição do item clicado no meu adapter
+                itemClickCallback.onIconClick(getAdapterPosition());
             }
         }
     }
-
-    //  Pode ser um método me apagar a ocorrência
-    public void removeAll(ArrayList<ListItem> exerciseList) {
-        this.listData.clear();
-        this.listData.addAll(exerciseList);
-    }
-
 
 }

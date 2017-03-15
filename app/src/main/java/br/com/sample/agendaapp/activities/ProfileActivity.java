@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import br.com.sample.agendaapp.R;
 import br.com.sample.agendaapp.core.ControllerProfileActivity;
@@ -27,6 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
     public void back(View view){
         profileName = et_name.getText().toString();
         ControllerProfileActivity.getInstance().setValue(profileName);
+        Toast.makeText(ProfileActivity.this, "Dados atualizados com sucesso", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
         startActivity(intent);
         finish();

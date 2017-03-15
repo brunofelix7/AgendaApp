@@ -11,8 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/et_web_view"
@@ -24,7 +23,11 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_search"/>
+            android:src="@drawable/ic_action_search"
+            android:padding="4dp"
+            android:background="@color/colorAccent"
+            android:tint="@android:color/white"
+            android:onClick="goToURL"/>
 
     </LinearLayout>
 
@@ -39,7 +42,5 @@
             android:layout_height="match_parent"/>
 
     </LinearLayout>
-
-
 
 </LinearLayout>

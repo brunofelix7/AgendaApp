@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,21 +13,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:tint="@color/colorAccent"
         android:src="@drawable/logo"/>
 
-    <EditText
-        android:id="@+id/et_login"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:hint="@string/txt_login"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/et_password"
+        <EditText
+            android:id="@+id/et_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"
+            android:hint="@string/txt_login"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="@string/txt_senha"/>
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"
+            android:inputType="textPassword"
+            android:hint="@string/txt_senha"/>
+
+    </android.support.design.widget.TextInputLayout>
 
     <CheckBox
         android:id="@+id/cb_save"
@@ -43,6 +59,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="signIn"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
         android:text="@string/txt_entrar"/>
 
 </LinearLayout>
