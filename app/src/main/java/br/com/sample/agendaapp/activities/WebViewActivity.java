@@ -31,7 +31,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     public void goToURL(View view) {
         url = et_web_view.getText().toString();
-        wv_url.loadUrl(url);
+        wv_url.loadUrl("http://" + url);
     }
 
     private class CustomWebClient extends WebViewClient {

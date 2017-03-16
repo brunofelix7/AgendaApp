@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import br.com.sample.agendaapp.R;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     private MyAdapter adapter;
     private ArrayList listData;
     private TextView tv_perfil;
+    private ImageView iv_perfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity
         //  Recupera o header do NavegationView
         View headerView = navigationView.getHeaderView(0);
         tv_perfil = (TextView) headerView.findViewById(R.id.tv_perfil);
+        iv_perfil = (ImageView) headerView.findViewById(R.id.iv_perfil);
 
         //  Recupero meus dados da numa lista
         listData = (ArrayList) MyContacts.getListData();

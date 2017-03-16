@@ -74,7 +74,7 @@
             android:layout_gravity="center"
             android:background="@color/colorAccent"
             android:textColor="@android:color/white"
-            android:onClick="back"
+            android:onClick="changeProfile"
             android:text="SALVAR" />
 
     </LinearLayout>

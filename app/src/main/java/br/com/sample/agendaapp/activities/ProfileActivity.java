@@ -25,7 +25,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    public void back(View view){
+    public void changeProfile(View view){
         profileName = et_name.getText().toString();
         ControllerProfileActivity.getInstance().setValue(profileName);
         Toast.makeText(ProfileActivity.this, "Dados atualizados com sucesso", Toast.LENGTH_SHORT).show();
